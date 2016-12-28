@@ -11,7 +11,7 @@ define(function (require) {
     return getAcr(val) ? val.value : val;
   }
 
-  function convertRowsToFeatures(table, geoI, metricI) {
+  function convertRowsToFeatures(table, geoI, metricI, centroidI) {
     return _.transform(table.rows, function (features, row) {
       let geohash = unwrap(row[geoI]);
       if (!geohash) return;
@@ -23,6 +23,16 @@ define(function (require) {
         location.latitude[2],
         location.longitude[2]
       ];
+
+      // fetch geo centroid and use it as point of feature if it exists
+      let point = centerLatLng;
+      let centroid = unwrap(row[centroidI]);
+      if (centroid) {
+        point = [
+          centroid.lat,
+          centroid.lon
+        ];
+      }
 
       // order is nw, ne, se, sw
       let rectangle = [
@@ -38,14 +48,18 @@ define(function (require) {
         type: 'Feature',
         geometry: {
           type: 'Point',
-          coordinates: centerLatLng.slice(0).reverse()
+          coordinates: point.slice(0).reverse()
         },
         properties: {
           geohash: geohash,
           value: unwrap(row[metricI]),
           aggConfigResult: getAcr(row[metricI]),
+          // Please remember that this is the center of the geohash or
+          // rectangle property.  It should not be considered the center of the
+          // feature.  Use the geometry coordinates for that.
           center: centerLatLng,
-          rectangle: rectangle
+          rectangle: rectangle,
+          centroid: centroid
         }
       });
     }, []);

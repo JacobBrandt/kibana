@@ -15,10 +15,12 @@ define(function (require) {
 
       let geoI = columnIndex('segment');
       let metricI = columnIndex('metric');
+      let centroidI = columnIndex('centroid');
       let geoAgg = _.get(table.columns, [geoI, 'aggConfig']);
       let metricAgg = _.get(table.columns, [metricI, 'aggConfig']);
+      let centroidAgg = _.get(table.columns, [centroidI, 'aggConfig']);
 
-      let features = rowsToFeatures(table, geoI, metricI);
+      let features = rowsToFeatures(table, geoI, metricI, centroidI);
       let values = features.map(function (feature) {
         return feature.properties.value;
       });

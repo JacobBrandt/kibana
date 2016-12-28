@@ -105,6 +105,14 @@ define(function (require) {
           ]
         },
         {
+          group: 'metrics',
+          name: 'centroid',
+          title: 'Geo Centroid',
+          aggFilter: 'geo_centroid',
+          min: 1,
+          max: 1
+        },
+        {
           group: 'buckets',
           name: 'segment',
           title: 'Geo Coordinates',
