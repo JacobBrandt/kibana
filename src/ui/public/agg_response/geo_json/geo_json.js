@@ -18,7 +18,6 @@ define(function (require) {
       let centroidI = columnIndex('centroid');
       let geoAgg = _.get(table.columns, [geoI, 'aggConfig']);
       let metricAgg = _.get(table.columns, [metricI, 'aggConfig']);
-      let centroidAgg = _.get(table.columns, [centroidI, 'aggConfig']);
 
       let features = rowsToFeatures(table, geoI, metricI, centroidI);
       let values = features.map(function (feature) {
